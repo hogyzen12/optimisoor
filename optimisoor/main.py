@@ -26,6 +26,63 @@ app.add_middleware(
 def read_root():
     return {"Why u": "pinging me?"}
 
+async def generate_percentile_scatter_plot(data, token_id, metadata):
+    if token_id not in data:
+        return None
+
+    token_data = data[token_id]
+    amounts = np.array([account['amount_normalized'] for account in token_data])
+    sorted_amounts = np.sort(amounts)[::-1]  # Sort amounts in descending order
+
+    # Generating x-values (percentiles) for each point
+    n = len(sorted_amounts)
+    percentiles = np.arange(1, n+1) / n * 100  # Calculate percentiles for each data point
+
+    plt.figure(figsize=(10, 6))
+    plt.scatter(percentiles, sorted_amounts, color='blue', alpha=0.7)
+
+    # Setting logarithmic scale for y-axis
+    plt.yscale('log')
+    plt.ylim(np.min(sorted_amounts[sorted_amounts > 0]), np.max(sorted_amounts))  # Avoid log(0) error by excluding zeros
+
+    # Plot aesthetics
+    plt.title(f"{metadata['name']} ({metadata['symbol']}) Distribution - Log Scale")
+    plt.xlabel("Percentile")
+    plt.ylabel(f"Token Amount ({metadata['symbol']}) [Log Scale]")
+    plt.grid(True, which="both", ls="--", linewidth=0.5)
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    plt.close()
+    buf.seek(0)
+    return base64.b64encode(buf.read()).decode('utf-8')
+
+async def plot_pet_logarithmic_bins(data, token_id, metadata, price):
+    token_data = data.get(token_id, [])
+    if not token_data:
+        return None
+
+    amounts = np.array([account['amount_normalized'] for account in token_data if account['amount_normalized'] > 0])
+    if amounts.size == 0:
+        return None
+
+    bins = [0.1, 0.3, 0.6, 0.9, 1.1, 2, 4, 6, np.inf]
+    bin_labels = ['0.1-0.3','0.3-0.6', '0.6-0.9', '0.9-1.1', '1.1-2', '2-4', '4-6', '6+']
+    counts, _ = np.histogram(amounts, bins=bins)
+    percentages = (counts / counts.sum()) * 100 if counts.sum() > 0 else [0] * len(counts)
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(bin_labels, percentages, color='green', alpha=0.7)
+    plt.title(f"Distribution of {metadata['name']} ({metadata['symbol']}) - Current Price: {price:.4f} SOL")
+    plt.xlabel("Token Holdings Range")
+    plt.ylabel("Percentage of Holders")
+    plt.grid(True, which="both", ls="--", linewidth=0.5)
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    plt.close()
+    buf.seek(0)
+    return base64.b64encode(buf.read()).decode('utf-8')
+
 async def plot_logarithmic_bins(data, token_id, metadata, price):
     token_data = data.get(token_id, [])
     if not token_data:
@@ -99,7 +156,8 @@ async def show_dashboard(request: Request):
     images = {}
     for token, metadata in zip(tokens, metadata_results):
         price = prices_dict.get(token, 0.0) / 1_000_000_000
-        image_base64 = await plot_logarithmic_bins(data, token, metadata, price)
+        #image_base64 = await plot_logarithmic_bins(data, token, metadata, price)
+        image_base64 = await plot_pet_logarithmic_bins(data, token, metadata, price)
         if image_base64:
             images[token] = image_base64
 

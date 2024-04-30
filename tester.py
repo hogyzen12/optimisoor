@@ -66,15 +66,20 @@ def load_and_process_json_files(tokens):
 
 def main():
     tokens = [
-        'he1iusmfkpAdwvxLNGV8Y1iSbj4rUy6yMhEA3fotn9A',
         'jucy5XJ76pHVvtPZb5TKRcGQExkwit2P5s4vY8UzmpC',
         '5oVNBeEEQvYi1cX3ir8Dx5n1P7pdxydbGF2X4TxVusJm',
+        'jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v',
+        'he1iusmfkpAdwvxLNGV8Y1iSbj4rUy6yMhEA3fotn9A',        
         'BonK1YhkXEGLZzwtcvRTip3gAL9nCeQD7ppZBLXhtTs',
         'GRJQtWwdJmp5LLpy8JWjPgn5FnLyqSJGNhn5ZnCTFUwM',
         'Comp4ssDzXcLeu2MnLuGNNFC4cmLPMng8qWHPvzAMU1h',
-        'HUBsveNpjo5pWqNkH57QzxjQASdTVXcSK7bVKTSZtcSX',
-        'jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v',
-        'picobAEvs6w7QEknPce34wAE4gknZA9v5tTonnmHYdX'
+        'HUBsveNpjo5pWqNkH57QzxjQASdTVXcSK7bVKTSZtcSX',        
+        'picobAEvs6w7QEknPce34wAE4gknZA9v5tTonnmHYdX',
+        'Dso1bDeDjCQxTrWHqUUi63oBvV7Mdm6WaobLbQ7gnPQ',
+        'LnTRntk2kTfWEY6cVB8K9649pgJbt6dJLS1Ns1GZCWg',
+        'phaseZSfPxTDBpiVb96H4XFSD8xHeHxZre5HerehBJG',
+        'pumpkinsEq8xENVZE6QgTS93EN4r9iKvNxNALS1ooyp',
+        'pWrSoLAhue6jUxUkbWgmEy5rD9VJzkFmvfTDV5KgNuu'
     ]
 
     for mint in tokens:
