@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LST Distribution Dashboard</title>
+</head>
+<body>
+    <h1>Token Distribution Dashboard</h1>
+    {% for token, image_data in images.items() %}
+        <div>
+            <h2>Distribution for {{ token }}</h2>
+            <img src="data:image/png;base64,{{ image_data }}" alt="Distribution Plot for {{ token }}">
+        </div>
+    {% endfor %}
+</body>
+</html>
