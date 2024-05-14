@@ -2,14 +2,159 @@
 <html>
 <head>
     <title>LST Distribution Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin: 10px;
+            padding: 15px;
+            width: 45%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+        }
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.25rem;
+        }
+        .row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .swiper-container {
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 50px;
+        }
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 500px; /* Increased height */
+        }
+        .swiper-slide img {
+            max-width: 95%; /* Increased width */
+            height: 95%; /* Increased height */
+            border-radius: 0.25rem;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal img {
+            width: 100%;
+            height: auto;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: #fff;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 </head>
 <body>
     <h1>Token Distribution Dashboard</h1>
-    {% for token, image_data in images.items() %}
-        <div>
-            <h2>Distribution for {{ token }}</h2>
-            <img src="data:image/png;base64,{{ image_data }}" alt="Distribution Plot for {{ token }}">
+    
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for token, url in overall_graphs.items() %}
+                <div class="swiper-slide">
+                    <img src="{{ url }}" alt="Distribution Plot for {{ token }}">
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+    <div class="container">
+        {% for token, urls in lst_graphs.items() %}
+            <div class="row">
+                <div class="card" onclick="openModal('{{ urls.pet }}')">
+                    <img src="{{ urls.pet }}" alt="Pet Log Distribution Plot for {{ token }}">
+                </div>
+                <div class="card" onclick="openModal('{{ urls.log }}')">
+                    <img src="{{ urls.log }}" alt="Log Distribution Plot for {{ token }}">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal" onclick="closeModal()">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img id="modal-image" src="" alt="">
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+
+        // Modal functionality
+        function openModal(src) {
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("modal-image");
+            modal.style.display = "flex";
+            modalImg.src = src;
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+    </script>
 </body>
 </html>
