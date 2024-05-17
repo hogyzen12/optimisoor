@@ -6,8 +6,13 @@ import os
 
 def fetch_token_metadata(mint):
     url = f"https://api.sanctum.so/v1/metadata/{mint}"
-    response = requests.get(url)
-    return response.json()
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to fetch metadata for {mint}: {e}")
+        return None
 
 def fetch_token_accounts_from_solana_fm(mint):
     url = f"https://api.solana.fm/v1/tokens/{mint}/holders"
@@ -22,25 +27,30 @@ def fetch_token_accounts_from_solana_fm(mint):
             'page': page,
             'pageSize': 1000  # Adjust the pageSize if needed
         }
-        response = requests.get(url, headers=headers, params=params)
-        if response.status_code != 200:
-            print(f"Failed to fetch data: {response.status_code} - {response.text}")
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+
+            data = response.json()
+            if 'tokenAccounts' in data and data['tokenAccounts']:
+                token_accounts.extend(data['tokenAccounts'])
+                total_items_collected += len(data['tokenAccounts'])
+            else:
+                break
+
+            total_items_available = data.get('totalItemCount', 0)
+            print(f"Page {page}: Retrieved {len(data['tokenAccounts'])} accounts, Total collected: {total_items_collected}")
+            page += 1
+            time.sleep(1)
+        except requests.exceptions.RequestException as e:
+            print(f"Failed to fetch token accounts for {mint} on page {page}: {e}")
             break
 
-        data = response.json()
-        if 'tokenAccounts' in data and data['tokenAccounts']:
-            token_accounts.extend(data['tokenAccounts'])
-            total_items_collected += len(data['tokenAccounts'])
-        else:
-            break
-
-        total_items_available = data.get('totalItemCount', 0)
-        print(f"Page {page}: Retrieved {len(data['tokenAccounts'])} accounts, Total collected: {total_items_collected}")
-        page += 1
-        time.sleep(1)
-
-    with open(f"{mint}_accounts.json", 'w') as f:
-        json.dump(token_accounts, f, indent=2)
+    if token_accounts:
+        with open(f"{mint}_accounts.json", 'w') as f:
+            json.dump(token_accounts, f, indent=2)
+    else:
+        print(f"No token accounts retrieved for {mint}")
 
     return token_accounts
 
@@ -66,6 +76,11 @@ def load_and_process_json_files(tokens):
 
 def main():
     tokens = [
+        'LAinEtNLgpmCP9Rvsf5Hn8W6EhNiKLZQti1xfWMLy6X',
+        'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn',
+        'fpSoL8EJ7UA5yJxFKWk1MFiWi35w8CbH36G5B9d7DsV',
+        'pathdXw4He1Xk3eX84pDdDZnGKEme3GivBamGCVPZ5a',
+        'iceSdwqztAQFuH6En49HWwMxwthKMnGzLFQcMN3Bqhj',
         'jucy5XJ76pHVvtPZb5TKRcGQExkwit2P5s4vY8UzmpC',
         '5oVNBeEEQvYi1cX3ir8Dx5n1P7pdxydbGF2X4TxVusJm',
         'jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v',
@@ -79,14 +94,16 @@ def main():
         'LnTRntk2kTfWEY6cVB8K9649pgJbt6dJLS1Ns1GZCWg',
         'phaseZSfPxTDBpiVb96H4XFSD8xHeHxZre5HerehBJG',
         'pumpkinsEq8xENVZE6QgTS93EN4r9iKvNxNALS1ooyp',
-        'pWrSoLAhue6jUxUkbWgmEy5rD9VJzkFmvfTDV5KgNuu'
+        'pWrSoLAhue6jUxUkbWgmEy5rD9VJzkFmvfTDV5KgNuu',
+        'CgnTSoL3DgY9SFHxcLj6CgCgKKoTBr6tp4CPAEWy25DE'        
     ]
 
     for mint in tokens:
         metadata = fetch_token_metadata(mint)
-        print(f"Processing {metadata['name']} ({metadata['symbol']})")
-        token_accounts = fetch_token_accounts_from_solana_fm(mint)
-        print(f"Completed {metadata['name']} ({metadata['symbol']})")
+        if metadata:
+            print(f"Processing {metadata['name']} ({metadata['symbol']})")
+            fetch_token_accounts_from_solana_fm(mint)
+            print(f"Completed {metadata['name']} ({metadata['symbol']})")
         time.sleep(5)  # Sleep to manage API call frequency
 
     # After collecting all data, process it into a single JSON

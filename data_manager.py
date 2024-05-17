@@ -43,7 +43,7 @@ def run_data_plotter():
 
 def push_to_server(directory):
     base_url = "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/"
-    api_url = "https://damp-fabled-panorama.solana-mainnet.quiknode.pro/186133957d30cece76e7cd8b04bce0c5795c164e/"
+    api_url = "https://radial-tame-snow.solana-mainnet.quiknode.pro/f02bf8d532bcad89e4758a5e5540fb988debdcd2/"
     keypair_path = "/Users/hogyzen12/.config/solana/dshYBbhPkXeYjuHPq1XZGivpXdS4ibXp2jfaACs5ZrH.json"
     
     for filename in os.listdir(directory):
@@ -83,12 +83,12 @@ def main():
             run_data_fetcher()
             print("Data fetch cycle completed.")
 
-            # Run the data plotter script
-            run_data_plotter()
+        # Run the data plotter script
+        run_data_plotter()
 
-            # Move the data to the dated directory
-            move_data_to_directory(directory)
-            print("Data plotting completed.")
+        # Move the data to the dated directory
+        move_data_to_directory(directory)
+        print("Data plotting completed.")
 
         # Push the data and images to the server
         push_to_server("figures")

@@ -221,13 +221,13 @@ def plot_unique_owners_per_token(data, metadata_results, directory="figures"):
     owner_counts = list(token_owners.values())
 
     # Plotting
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(12, 7))
     bars = plt.bar(tokens, owner_counts, color='blue', alpha=0.7)
     plt.yscale('log')  # Set logarithmic scale on y-axis
     plt.xlabel('Token Name')
     plt.ylabel('Number of Unique Owners (Log Scale)')
     plt.title('Number of Unique Owners per Token')
-    plt.xticks(rotation=90)  # Rotate token labels to avoid overlap
+    plt.xticks(rotation=45)  # Rotate token labels to avoid overlap
     plt.grid(True, which="both", ls="--", linewidth=0.5)
 
     # Adding text on top of each bar

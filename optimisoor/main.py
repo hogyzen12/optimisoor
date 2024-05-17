@@ -31,9 +31,9 @@ async def show_dashboard(request: Request):
     # Hardcoded image URLs
     overall_graphs = {
         "total tokens per owner distribution": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/total_tokens_per_owner_distribution.webp",
-        "unique owners per token distribution": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/unique_owners_per_token_distribution.webp",
         "cumulative total tokens per owner distribution": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/cumulative_total_tokens_per_owner_distribution.webp",
-        "token diversity per owner": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/token_diversity_per_owner.webp"
+        "token diversity per owner": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/token_diversity_per_owner.webp",
+        "unique owners per token distribution": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/unique_owners_per_token_distribution.webp"
     }
 
     lst_graphs = {
@@ -48,7 +48,27 @@ async def show_dashboard(request: Request):
         "Jupiter Staked SOL": {
             "pet": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Jupiter_Staked_SOL_pet_log_bins.webp",
             "log": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Jupiter_Staked_SOL_log_bins.webp"
-        },        
+        },
+        "Laine SOL": {
+            "pet": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Laine_High_Yield_LST_pet_log_bins.webp",
+            "log": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Laine_High_Yield_LST_log_bins.webp"
+        },
+        "JitoSol": {
+            "pet": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Jito_Staked_SOL_pet_log_bins.webp",
+            "log": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Jito_Staked_SOL_log_bins.webp"
+        },
+        "fpLee SOL": {
+            "pet": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/FP_SOL_pet_log_bins.webp",
+            "log": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/FP_SOL_log_bins.webp"
+        },
+        "iceSOL": {
+            "pet": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/iceSOL_pet_log_bins.webp",
+            "log": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/iceSOL_log_bins.webp"
+        },
+        "Pathfinders SOL": {
+            "pet": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Pathfinders_SOL_pet_log_bins.webp",
+            "log": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Pathfinders_SOL_log_bins.webp"
+        },      
         "Helius Staked SOL": {
             "pet": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Helius_Staked_SOL_pet_log_bins.webp",
             "log": "https://shdw-drive.genesysgo.net/7xLawi47mz65xag7NXvEvkMTqLtdG9dWoSh4sLhf56fc/Helius_Staked_SOL_log_bins.webp"
